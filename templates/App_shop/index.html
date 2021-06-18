@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title  %}  {% endblock title %}
+
+{% block stylelink %} {% endblock stylelink %}
+
+{% block inlineStyle %}
+{% endblock inlineStyle %}
+
+{% block mainvavbar %}
+{% include 'navbar.html' %}
+{% endblock mainvavbar %}
+
+{% block main_contain %}
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <!-- category show Start  -->
+            <div class="col-lg-3 mx-auto">
+                <div class="list-group">
+                    <a href="/" class="list-group-item list-group-item-action active">
+                       All Category
+                    </a>
+                    {% for category in all_category %}
+                    <a href="/?category={{ category.id }}" class="list-group-item list-group-item-action"> {{ category.title}} </a>
+                    {% endfor %}
+                </div>
+            </div><!-- category show Enb -->
+            <!-- product show start -->
+            <div id="products" class="col-lg-9 mx-auto">
+                <div class="row mx-auto">
+                    {% for product in all_products %}
+                        <div class="card mx-auto mb-3" style="width: 18rem;">
+                            <img class="card-img-top" src="{{ product.main_img.url }}"  style="height: 20rem;" alt="Card image cap">
+                            <div class="card-body">
+                                <p class="card-title"> {{ product.name}} </p>
+                                <p class="card-text"> Some quick example text to build on the card title and make up
+                                    the bulk of the
+                                    card's content.</p>
+                                <a href="#" class="btn btn-light border btn-sm">Add to cart</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div><!-- product show start end  -->
+        </div>
+    </div>
+{% endblock main_contain %}
+
+
+{% block javascriptLink %} {% endblock javascriptLink %}
+{% block inlinejavascriptLink %} {% endblock inlinejavascriptLink %}

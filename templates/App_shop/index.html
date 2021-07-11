@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+<!-- templatetag  cart.py -->
+{% load cart %}
+
 {% block title  %}  {% endblock title %}
 
 {% block stylelink %} {% endblock stylelink %}
@@ -29,14 +32,44 @@
             <div id="products" class="col-lg-9 mx-auto">
                 <div class="row mx-auto">
                     {% for product in all_products %}
-                        <div class="card mx-auto mb-3" style="width: 18rem;">
+                        <div class="card mx-auto mb-3" id="{{ product.id }}" style="width: 18rem;">
                             <img class="card-img-top" src="{{ product.main_img.url }}"  style="height: 20rem;" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-title"> {{ product.name}} </p>
-                                <p class="card-text"> Some quick example text to build on the card title and make up
-                                    the bulk of the
-                                    card's content.</p>
-                                <a href="#" class="btn btn-light border btn-sm">Add to cart</a>
+                                <p class="card-text"> {{ product.price }} &#2547; </p>
+                                <!-- add to card --->
+                                <div class="card-footer p-0  no-gutters">
+                                   <!-- product and  request.session.cart valu pass korche  templatetag --->
+                                    {% if  product|is_product_in_cart:request.session.cart %}
+                                        <div class="row no-gutters">
+                                           <div class="col-2">
+                                               <!-- /#{{ product.id }} current location a thakar jonno jeno bar bar home page er first a na ase scrrol hoye -->
+                                                <form action="/#{{ product.id }}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="text" hidden name="remove" value="True">
+                                                     <input type="text" hidden name="product" value="{{ product.id }}"> <!-- ai ta mane add to card click kora -->
+                                                     <input type="submit" value=" - " class="btn btn-block btn-secondary">
+                                                </form>
+                                            </div>
+                                            <!-- cart quantity -->
+                                            <div class="text-center col">{{ product|cart_product_quantity:request.session.cart }} in Cart</div>
+                                            <div class="col-2">
+                                                <form action="/#{{ product.id }}" method="post">
+                                                    {% csrf_token %}
+                                                     <input type="text" hidden name="product" value="{{ product.id }}"> <!-- ai ta mane add to card click kora -->
+                                                     <input type="submit" value=" + " class="btn btn-block btn-secondary">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <form action="/#{{ product.id }}" method="post" class="btn-block">
+                                            {% csrf_token %}
+                                            <input type="text" hidden name="product" value="{{ product.id }}">
+                                            <input type="submit" class="float-right btn btn-light border form-control"
+                                                   value="Add to cart">
+                                        </form>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     {% endfor %}

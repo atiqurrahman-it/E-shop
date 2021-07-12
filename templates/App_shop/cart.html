@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cart %}
+{% load currency_money_logo %}
+{% block title  %}  {% endblock title %}
+
+{% block stylelink %} {% endblock stylelink %}
+
+{% block inlineStyle %}
+{% endblock inlineStyle %}
+
+
+{% block mainvavbar %}
+{% include 'navbar.html' %}
+{% endblock mainvavbar %}
+
+
+{% block main_contain %}
+  <div class="container my-5">
+    <div class="my-5">
+        <h2>Your Cart {{ total_order_items }}</h2>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Img</th>
+            <th scope="col">Product_Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col" align="right">Total Price</th>
+            <th scope="col">Remove</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for product in add_to_product %}
+            <tr>
+                <th scope="row" width="3%"> {{ forloop.counter }} </th>
+               <td><img src="{{ product.main_img.url }}" style="height:80px; width:100px;"></td>
+                <td>{{ product.name }}</td>
+               <td>{{ product.price|currency_money }} </td>
+               <td>
+                   <a href="" class="mr-2"> <span class="badge badge-light"><i class="fas fa-minus"></i></span></a>
+                   {{ product|cart_product_quantity:request.session.cart }}
+                   <a href="" class="mr-2"> <span class="badge badge-light"><i class="fas fa-plus"></i></span></a>
+               </td>
+               <td>  {{ product|price_total:request.session.cart|currency_money }} </td>
+               <td><a href="" class="btn btn-danger btn-sm"> Remove</a></td>
+            </tr>
+            {% endfor %}
+
+           <tr>
+               <th scope="row"></th>
+               <td colspan="4"> <b>Total Price</b> </td>
+               <td ><b>{{ add_to_product|total_cart_price:request.session.cart|currency_money  }} </b></td>
+           </tr>
+            <tr>
+              <th scope="row"></th>
+              <td colspan="6" class="text-right">
+                  <a href="{% url 'AppShopStore:homepage' %}" class="btn btn-warning mr-4">Continue Shopping </a>
+                  <a href="" class="btn btn-success mr-4">Proceed to Checkout </a>
+              </td>
+          </tr>
+        </tbody>
+
+    </table>
+    </div>
+{% endblock main_contain %}
+
+{% block javascriptLink %} {% endblock javascriptLink %}
+{% block inlinejavascriptLink %} {% endblock inlinejavascriptLink %}

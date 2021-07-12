@@ -37,7 +37,7 @@ class Homepage(View):
         # if session delete kore dei tahole empty session add korte hobe
         cart = request.session.get('cart')
         if not cart:
-            request.session[cart] = {}
+            request.session['cart'] = {}
 
         # products = Product.get_all_products()
         products = None
@@ -63,3 +63,13 @@ class Homepage(View):
             "all_category": category,
         }
         return render(request, 'App_shop/index.html', data)
+
+
+class add_to_cart(View):
+    def get(self, request):
+        cart_ids = list(request.session.get('cart').keys())
+        add_to_product = Product.objects.filter(id__in=cart_ids)
+        data = {
+            "add_to_product": add_to_product,
+        }
+        return render(request, 'App_shop/cart.html', data)

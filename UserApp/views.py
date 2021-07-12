@@ -51,6 +51,7 @@ def Login(request):
 
 
 def LogOUt(request):
-    logout(request)
+    request.session.clear()
+    # logout(request)
     # messages.warning(request, 'Your are logged Out')
     return HttpResponseRedirect(reverse('AppShopStore:homepage'))
